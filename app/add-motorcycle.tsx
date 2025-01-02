@@ -9,25 +9,18 @@ export default function HomeScreen() {
 
   const [motorcycleData, setMotorcycleData] = useState({
     model: "",
-    milage: 0,
+    mileage: 0,
   });
 
   const add = async () => {
-    if (!motorcycleData.model || !motorcycleData.milage) {
+    if (!motorcycleData.model || !motorcycleData.mileage) {
       Alert.alert("Error", "All fields are required");
     } else {
       try {
         await db.execAsync(`
-          PRAGMA journal_mode = WAL;
-          
-          CREATE TABLE IF NOT EXISTS motorcycles (
-            id INTEGER PRIMARY KEY NOT NULL,
-            model TEXT NOT NULL
-          );
-          
-          INSERT INTO motorcycles (model) VALUES ('${motorcycleData.model}');
-          `);
-        console.log("Motorcycle added");
+          INSERT INTO motorcycles (model, mileage) 
+          VALUES ('${motorcycleData.model}', '${motorcycleData.mileage}');`);
+
         router.replace("/");
       } catch (error: any) {
         Alert.alert("Error", error.message);
@@ -45,11 +38,11 @@ export default function HomeScreen() {
         }
       />
       <TextInput
-        placeholder="Milage"
-        value={motorcycleData.milage.toString()}
+        placeholder="Mileage"
+        value={motorcycleData.mileage.toString()}
         keyboardType="numeric"
         onChangeText={(m: string) =>
-          setMotorcycleData({ ...motorcycleData, milage: parseInt(m) })
+          setMotorcycleData({ ...motorcycleData, mileage: parseInt(m) | 0 })
         }
       />
       <TouchableOpacity

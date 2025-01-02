@@ -9,6 +9,7 @@ import { SQLiteProvider } from "expo-sqlite";
 
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { migrateDbIfNeeded } from "@/lib/db";
+import "../global.css";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -30,7 +31,7 @@ export default function RootLayout() {
   }
 
   return (
-    <SQLiteProvider databaseName="test.db" onInit={migrateDbIfNeeded}>
+    <SQLiteProvider databaseName="moto.db" onInit={migrateDbIfNeeded}>
       {/*<ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>*/}
       <ThemeProvider value={DefaultTheme}>
         <Stack
