@@ -1,24 +1,34 @@
-import { Tabs, useLocalSearchParams } from "expo-router";
-import { View, Text } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { DataIcon, SettingsIcon, TireRepairIcon } from "@/components/Icons";
+import { Tabs } from "expo-router";
 
-export default function DetailsScreen() {
-  const { id } = useLocalSearchParams();
-
+export default function Layout() {
   return (
-    <Tabs>
+    <Tabs screenOptions={{ headerShown: false }}>
       <Tabs.Screen
         name="index"
         options={{
-          title: "index",
-          headerShown: false,
+          title: "Service Items",
+          tabBarIcon: (props) => {
+            return <TireRepairIcon color={props.color} />;
+          },
         }}
       />
       <Tabs.Screen
         name="data"
         options={{
-          title: "Data",
-          headerShown: false,
+          title: "Service Data",
+          tabBarIcon: (props) => {
+            return <DataIcon color={props.color} />;
+          },
+        }}
+      />
+      <Tabs.Screen
+        name="bike_settings"
+        options={{
+          title: "Motorcycle Settings",
+          tabBarIcon: (props) => {
+            return <SettingsIcon color={props.color} />;
+          },
         }}
       />
     </Tabs>

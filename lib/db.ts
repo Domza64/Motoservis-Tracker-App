@@ -1,7 +1,19 @@
+import { DB_NAME } from "@/constants/Settings";
+import * as FileSystem from "expo-file-system";
 import { type SQLiteDatabase } from "expo-sqlite";
+import * as Updates from "expo-updates";
 
 export async function migrateDbIfNeeded(db: SQLiteDatabase) {
   const DATABASE_VERSION = 0;
+
+  try {
+    await db.execAsync("PRAGMA user_version;");
+    console.log("Database is correct");
+  } catch (error) {
+    await deleteDatabase();
+    await Updates.reloadAsync();
+    console.log("Database file error, deleted and reloaded");
+  }
 
   // Set WAL mode
   await db.execAsync("PRAGMA journal_mode = WAL;");
@@ -55,3 +67,15 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
 
   await db.execAsync(`PRAGMA user_version = ${DATABASE_VERSION}`);
 }
+
+const deleteDatabase = async () => {
+  const dbPath = `${FileSystem.documentDirectory}SQLite/${DB_NAME}`;
+  try {
+    const fileInfo = await FileSystem.getInfoAsync(dbPath);
+    if (fileInfo.exists) {
+      await FileSystem.deleteAsync(dbPath);
+    }
+  } catch (error) {
+    console.error("Error deleting database:", error);
+  }
+};

@@ -1,33 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { Alert, FlatList, Text, TouchableOpacity, View } from "react-native";
-import { router, useLocalSearchParams } from "expo-router";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { useGlobalSearchParams } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import ServiceItem from "@/lib/ServiceItem";
 import ServiceItemCard from "@/components/ServiceItemCard";
 import Motorcycle from "@/lib/Motorcycle";
 
-function Home() {
-  const { id } = useLocalSearchParams();
+function ServiceItems() {
+  const { id } = useGlobalSearchParams();
   const db = useSQLiteContext();
 
   const [services, setServices] = useState<ServiceItem[]>([]);
   const [motorcycle, setMotorcycle] = useState<Motorcycle | null>(null);
-
-  const deleteMotorcycle = async () => {
-    const statement = await db.prepareAsync(
-      "DELETE FROM motorcycles WHERE id = $id"
-    );
-
-    try {
-      await statement.executeAsync({ $id: parseInt(id.toString()) });
-    } catch (error: any) {
-      Alert.alert("Error", error.message);
-    } finally {
-      await statement.finalizeAsync();
-      router.replace("/");
-    }
-  };
 
   const addServiceItem = async () => {
     const statement = await db.prepareAsync(
@@ -75,43 +59,35 @@ function Home() {
   }
 
   return (
-    <SafeAreaView>
-      <View className="flex gap-4 h-full justify-between p-2">
-        <FlatList
-          data={services}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => (
-            <ServiceItemCard onDelete={loadServiceItems} serviceItem={item} />
-          )}
-          ListHeaderComponent={() => (
-            <View>
-              <Text className="text-2xl font-semibold">{motorcycle.model}</Text>
-              <Text>Current mileage: {motorcycle.mileage} km</Text>
-            </View>
-          )}
-          ListEmptyComponent={() => <Text>No service items yet</Text>}
-          ItemSeparatorComponent={() => <View className="h-4" />}
-        />
-
+    <FlatList
+      data={services}
+      keyExtractor={(item) => item.id.toString()}
+      renderItem={({ item }) => (
+        <ServiceItemCard onDelete={loadServiceItems} serviceItem={item} />
+      )}
+      className="p-2 bg-white"
+      ListHeaderComponent={() => (
+        <View>
+          <Text className="font-semibold">{motorcycle.model}</Text>
+          <Text>Current mileage: {motorcycle.mileage} km</Text>
+        </View>
+      )}
+      ListEmptyComponent={() => <Text>No service items yet</Text>}
+      ItemSeparatorComponent={() => <View className="h-4" />}
+      ListFooterComponent={() => (
         <View>
           <TouchableOpacity
             onPress={addServiceItem}
-            className="p-4 bg-blue-300 rounded-lg m-2 shadow-lg"
+            className="p-4 bg-slate-400 rounded-lg mt-3 shadow-md"
           >
             <Text className="text-white font-bold text-center">
               Add service item
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity
-            onPress={deleteMotorcycle}
-            className="p-4 bg-red-500 rounded-lg m-2 shadow-md shadow-gray-600"
-          >
-            <Text className="text-white font-bold text-center">Delete</Text>
-          </TouchableOpacity>
         </View>
-      </View>
-    </SafeAreaView>
+      )}
+    />
   );
 }
 
-export default Home;
+export default ServiceItems;
