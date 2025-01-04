@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { Alert, Text, TextInput, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-export default function HomeScreen() {
+export default function AddMotorcycle() {
   const db = useSQLiteContext();
 
   const [motorcycleData, setMotorcycleData] = useState({

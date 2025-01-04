@@ -23,6 +23,7 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
           CREATE TABLE IF NOT EXISTS motorcycles (
           id INTEGER PRIMARY KEY NOT NULL,
           model TEXT NOT NULL,
+          description TEXT NOT NULL,
           mileage INTEGER NOT NULL
           );`);
 

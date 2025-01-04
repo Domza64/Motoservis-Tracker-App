@@ -26,7 +26,10 @@ const Header = (route: any) => {
   return (
     <View>
       <Text numberOfLines={1} className="text-2xl font-bold">
-        {title}
+        {title}{" "}
+        <Text className="text-sm text-gray-600 font-normal">
+          (show only when scrolled up)
+        </Text>
       </Text>
     </View>
   );

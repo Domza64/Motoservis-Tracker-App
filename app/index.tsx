@@ -1,8 +1,9 @@
 import Motorcycle from "@/lib/Motorcycle";
-import { Link, router } from "expo-router";
+import { router } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import { useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, ScrollView } from "react-native";
+import { View, Text, TouchableOpacity, ScrollView, Image } from "react-native";
+import logo from "@/assets/images/motoservis.png";
 
 export default function HomeScreen() {
   const db = useSQLiteContext();
@@ -20,32 +21,75 @@ export default function HomeScreen() {
   }, []);
 
   return (
-    <ScrollView className="p-2 bg-white">
-      {motorcycles.map((motorcycle, index) => (
-        <TouchableOpacity
-          onPress={() => {
-            router.push(`/motorcycle/${motorcycle.id}`);
-          }}
-          key={index}
-          className="p-2 my-1.5 rounded-lg bg-gray-100 shadow flex flex-row gap-4 items-center"
-        >
-          <View className="bg-gray-200 w-32 h-32"></View>
-          <View>
-            <Text className="font-bold text-xl">{motorcycle.model}</Text>
-            <Text>Currently has: {motorcycle.mileage} km</Text>
-          </View>
-        </TouchableOpacity>
-      ))}
+    <ScrollView className="bg-white p-4" showsVerticalScrollIndicator={false}>
+      <Image source={logo} className="w-40 h-40 mx-auto" resizeMode="contain" />
+      {/* Welcome Text */}
+      <View className="my-4">
+        <Text className="text-center text-lg text-gray-600 mt-2">
+          Keep track of your motorcycle's maintenance and its service schedule
+          to enjoy every ride!
+        </Text>
+        <Text className="text-center text-sm text-gray-500 mt-4">
+          Ready to maintain your bike? Select one below or add a new motorcycle
+          to track its services.
+        </Text>
+      </View>
+
+      {/* List of Motorcycles */}
+      {motorcycles.length > 0 ? (
+        motorcycles.map((motorcycle, index) => (
+          <TouchableOpacity
+            onPress={() => {
+              router.push(`/motorcycle/${motorcycle.id}`);
+            }}
+            key={index}
+            className="p-3 my-2 rounded-lg bg-gray-100 shadow-lg flex flex-row gap-4 items-center"
+          >
+            {/* Motorcycle Image Placeholder */}
+            <View className="bg-gray-200 w-32 h-32 rounded-lg"></View>
+            <View>
+              <Text className="font-bold text-xl text-gray-800">
+                {motorcycle.model}
+              </Text>
+              <Text className="text-gray-600">
+                <Text className="font-semibold">Mileage:</Text>{" "}
+                {motorcycle.mileage} km
+              </Text>
+              <Text className="text-gray-500 text-sm mt-1">
+                Tap to view service items and track your bike's health.
+              </Text>
+            </View>
+          </TouchableOpacity>
+        ))
+      ) : (
+        <Text className="text-center text-lg text-gray-500 mt-6">
+          You haven't added any motorcycles yet. Start by adding one to track
+          its services!
+        </Text>
+      )}
+
+      {/* Add New Motorcycle Button */}
       <TouchableOpacity
         onPress={() => {
           router.push("/add-motorcycle");
         }}
-        className="bg-blue-400 mt-2 rounded-md shadow-lg shadow-black p-4"
+        className="bg-blue-400 mt-6 rounded-md shadow-lg p-4"
       >
         <Text className="text-white font-semibold text-center">
-          Add new motorcycle
+          Add New Motorcycle
         </Text>
       </TouchableOpacity>
+
+      {/* Reminder Section */}
+      <View className="mt-8 p-4 pb-10">
+        <Text className="text-center text-lg font-semibold text-gray-700">
+          Maintenance Tip of the Day
+        </Text>
+        <Text className="text-center text-sm text-gray-600 mt-2">
+          Regular maintenance is key to keeping your bike running smoothly.
+          Remember to check the oil and tire pressure often!
+        </Text>
+      </View>
     </ScrollView>
   );
 }

@@ -54,9 +54,8 @@ export default function RootLayout() {
           <Stack.Screen
             name="index"
             options={{
-              headerTitle() {
-                return <Header />;
-              },
+              headerTitle: "",
+              headerShadowVisible: false,
               headerRight() {
                 return (
                   <TouchableOpacity
@@ -71,7 +70,16 @@ export default function RootLayout() {
             }}
           />
           <Stack.Screen
-            name="motorcycle/[id]"
+            name="motorcycle/[id]/(tabs)"
+            options={({ route }) => ({
+              headerShadowVisible: false,
+              headerTitle() {
+                return <Header route={route} />;
+              },
+            })}
+          />
+          <Stack.Screen
+            name="motorcycle/[id]/add-service-item"
             options={({ route }) => ({
               headerTitle() {
                 return <Header route={route} />;

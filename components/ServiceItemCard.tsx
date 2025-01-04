@@ -32,7 +32,7 @@ const ServiceItemCard = ({ serviceItem, onDelete }: Props) => {
   };
 
   return (
-    <View className="bg-gray-200 p-4 rounded-md shadow-md">
+    <View className="bg-gray-100 p-4 rounded-md shadow-md">
       <Text className="font-bold">{name}</Text>
       <Text>{description || "No description available"}</Text>
       <Text>
@@ -47,7 +47,7 @@ const ServiceItemCard = ({ serviceItem, onDelete }: Props) => {
       </Text>
       <Text>ID: {serviceItem.id}</Text>
       <TouchableOpacity
-        className="bg-red-300 shadow-md p-2 mt-2 rounded-md"
+        className="bg-red-100 shadow-md p-2 mt-2 rounded-md"
         onPress={deleteServiceItem}
       >
         <Text>Delete</Text>
