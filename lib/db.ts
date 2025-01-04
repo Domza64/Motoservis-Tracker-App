@@ -23,9 +23,19 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
           CREATE TABLE IF NOT EXISTS motorcycles (
           id INTEGER PRIMARY KEY NOT NULL,
           model TEXT NOT NULL,
-          description TEXT NOT NULL,
+          description TEXT,
           mileage INTEGER NOT NULL
           );`);
+
+  // Create mileage_history table
+  await db.execAsync(`
+    CREATE TABLE IF NOT EXISTS mileage_history (
+    id INTEGER PRIMARY KEY NOT NULL,
+    motorcycle_id INTEGER NOT NULL,
+    mileage INTEGER NOT NULL,
+    recorded_date TEXT NOT NULL,
+    FOREIGN KEY (motorcycle_id) REFERENCES motorcycles (id) ON DELETE CASCADE
+    );`);
 
   // create service_items table
   await db.execAsync(`

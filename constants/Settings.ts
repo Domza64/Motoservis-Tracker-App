@@ -1,1 +1,1 @@
-export const DB_NAME = "moto.db";
+export const DB_NAME = "mototrack.db";

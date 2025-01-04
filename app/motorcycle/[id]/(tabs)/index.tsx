@@ -7,7 +7,7 @@ import ServiceItemCard from "@/components/ServiceItemCard";
 import Motorcycle from "@/lib/Motorcycle";
 import { useIsFocused } from "@react-navigation/native";
 import { SettingsIcon } from "@/components/Icons";
-import { SafeAreaView } from "react-native-safe-area-context";
+import MileageUpdate from "@/components/MileageUpdate";
 
 function ServiceItems() {
   const { id } = useGlobalSearchParams();
@@ -16,6 +16,7 @@ function ServiceItems() {
 
   const [services, setServices] = useState<ServiceItem[]>([]);
   const [motorcycle, setMotorcycle] = useState<Motorcycle | null>(null);
+  const [showMileageModal, setShowMileageModal] = useState(false);
 
   async function loadServiceItems() {
     const result = await db.getAllAsync<ServiceItem>(
@@ -76,7 +77,7 @@ function ServiceItems() {
           {/* Action Buttons */}
           <View className="flex-row items-center justify-between mt-6 gap-2">
             <TouchableOpacity
-              onPress={() => router.push(`/motorcycle/${id}/update-mileage`)}
+              onPress={() => setShowMileageModal(true)}
               className="p-3 bg-green-400 rounded-lg shadow-md flex-1"
             >
               <Text className="text-white font-bold text-center">
@@ -92,6 +93,19 @@ function ServiceItems() {
               </Text>
             </TouchableOpacity>
           </View>
+
+          {showMileageModal && (
+            <View className="mt-2 p-2 bg-gray-100 border-gray-300 border rounded">
+              <MileageUpdate
+                currentMilage={motorcycle.mileage}
+                onSuccess={() => {
+                  setShowMileageModal(false);
+                  loadMotorcycleInfo();
+                }}
+                cancel={() => setShowMileageModal(false)}
+              />
+            </View>
+          )}
 
           {/* Encourage users to maintain their bike */}
           <Text className="text-sm text-gray-500 mt-6 text-center">
