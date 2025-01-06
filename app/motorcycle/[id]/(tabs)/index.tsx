@@ -52,7 +52,11 @@ function ServiceItems() {
       keyExtractor={(item) => item.id.toString()}
       renderItem={({ item }) => (
         <View className="m-2">
-          <ServiceItemCard onDelete={loadServiceItems} serviceItem={item} />
+          <ServiceItemCard
+            onDelete={loadServiceItems}
+            serviceItem={item}
+            currentMotorcycleMilage={motorcycle.mileage}
+          />
         </View>
       )}
       ListHeaderComponent={() => (
@@ -76,16 +80,21 @@ function ServiceItems() {
 
           {/* Action Buttons */}
           <View className="flex-row items-center justify-between mt-6 gap-2">
+            {!showMileageModal && (
+              <TouchableOpacity
+                onPress={() => setShowMileageModal(true)}
+                className="p-3 bg-secondary rounded-lg shadow-md flex-1"
+              >
+                <Text className="text-white font-bold text-center">
+                  Update Mileage
+                </Text>
+              </TouchableOpacity>
+            )}
             <TouchableOpacity
-              onPress={() => setShowMileageModal(true)}
-              className="p-3 bg-green-400 rounded-lg shadow-md flex-1"
-            >
-              <Text className="text-white font-bold text-center">
-                Update Mileage
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => router.push(`/motorcycle/${id}/add-service-item`)}
+              onPress={() => {
+                setShowMileageModal(false);
+                router.push(`/motorcycle/${id}/add-service-item`);
+              }}
               className="p-3 bg-gray-300 rounded-lg shadow-md flex-1"
             >
               <Text className="text-gray-600 font-bold text-center">
@@ -95,7 +104,7 @@ function ServiceItems() {
           </View>
 
           {showMileageModal && (
-            <View className="mt-2 p-2 bg-gray-100 border-gray-300 border rounded">
+            <View className="mt-2">
               <MileageUpdate
                 currentMilage={motorcycle.mileage}
                 onSuccess={() => {

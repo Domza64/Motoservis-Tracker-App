@@ -6,6 +6,7 @@ interface Props {
   value?: string;
   handleChangeText: (e: string) => void;
   keyboardType?: KeyboardTypeOptions;
+  borderColor?: string;
 }
 
 export default function Input({
@@ -13,21 +14,27 @@ export default function Input({
   value,
   handleChangeText,
   keyboardType,
+  borderColor,
 }: Props) {
   const [isFocused, setIsFocused] = useState(false);
 
+  // Determine the border color to use
+  const currentBorderColor = borderColor
+    ? borderColor
+    : isFocused
+    ? "border-secondary"
+    : "border-transparent";
+
   return (
     <View
-      className={`w-full px-2 flex-row bg-gray-200 border rounded-lg ${
-        isFocused ? "border-yellow-600" : "border-black-200"
-      }`}
+      className={`w-full px-2 flex-row bg-gray-100 rounded-md border-2 ${currentBorderColor}`}
     >
       <TextInput
-        className="font-semibold w-full"
+        className="w-full font-pmedium text-gray-400"
         keyboardType={keyboardType}
         value={value}
         placeholder={placeholder}
-        placeholderTextColor="#7b7b8b"
+        placeholderTextColor="#9ca3af"
         onChangeText={handleChangeText}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}

@@ -3,7 +3,10 @@ import { router } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, ScrollView, Image } from "react-native";
+// @ts-ignore
 import logo from "@/assets/images/motoservis.png";
+// @ts-ignore
+import motorcycleImage from "@/assets/images/motorcycle.png";
 
 export default function HomeScreen() {
   const db = useSQLiteContext();
@@ -21,8 +24,11 @@ export default function HomeScreen() {
   }, []);
 
   return (
-    <ScrollView className="bg-white p-4" showsVerticalScrollIndicator={false}>
-      <Image source={logo} className="w-40 h-40 mx-auto" resizeMode="contain" />
+    <ScrollView
+      className="bg-background p-4"
+      showsVerticalScrollIndicator={false}
+    >
+      <Image source={logo} className="w-96 h-40 mx-auto" resizeMode="contain" />
       {/* Welcome Text */}
       <View className="my-4">
         <Text className="text-center text-lg text-gray-600 mt-2">
@@ -43,10 +49,16 @@ export default function HomeScreen() {
               router.push(`/motorcycle/${motorcycle.id}`);
             }}
             key={index}
-            className="p-3 my-2 rounded-lg bg-gray-100 shadow-lg flex flex-row gap-4 items-center"
+            className="py-2 pr-2 my-2 rounded-lg bg-gray-100 shadow-lg flex flex-row gap-4 items-center"
           >
             {/* Motorcycle Image Placeholder */}
-            <View className="bg-gray-200 w-32 h-32 rounded-lg"></View>
+            <View className="w-32 h-32">
+              <Image
+                source={motorcycleImage}
+                className="w-full h-full opacity-20"
+                resizeMode="contain"
+              />
+            </View>
             <View>
               <Text className="font-bold text-xl text-gray-800">
                 {motorcycle.model}
@@ -55,7 +67,7 @@ export default function HomeScreen() {
                 <Text className="font-semibold">Mileage:</Text>{" "}
                 {motorcycle.mileage} km
               </Text>
-              <Text className="text-gray-500 text-sm mt-1">
+              <Text className="text-gray-500 text-sm mt-1 w-56">
                 Tap to view service items and track your bike's health.
               </Text>
             </View>
@@ -73,7 +85,7 @@ export default function HomeScreen() {
         onPress={() => {
           router.push("/add-motorcycle");
         }}
-        className="bg-blue-400 mt-6 rounded-md shadow-lg p-4"
+        className="bg-primary mt-6 rounded-md shadow-black shadow-md p-4"
       >
         <Text className="text-white font-semibold text-center">
           Add New Motorcycle
