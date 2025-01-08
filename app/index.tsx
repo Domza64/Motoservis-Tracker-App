@@ -7,21 +7,26 @@ import { View, Text, TouchableOpacity, ScrollView, Image } from "react-native";
 import logo from "@/assets/images/motoservis.png";
 // @ts-ignore
 import motorcycleImage from "@/assets/images/motorcycle.png";
+import { useIsFocused } from "@react-navigation/native";
 
 export default function HomeScreen() {
   const db = useSQLiteContext();
+  const isFocused = useIsFocused();
   const [motorcycles, setMotorcycles] = useState<Motorcycle[]>([]);
 
-  useEffect(() => {
-    async function setup() {
-      const result = await db.getAllAsync<Motorcycle>(
-        "SELECT * FROM motorcycles"
-      );
+  async function setup() {
+    const result = await db.getAllAsync<Motorcycle>(
+      "SELECT * FROM motorcycles"
+    );
 
-      setMotorcycles(result);
+    setMotorcycles(result);
+  }
+
+  useEffect(() => {
+    if (isFocused) {
+      setup();
     }
-    setup();
-  }, []);
+  }, [isFocused]);
 
   return (
     <ScrollView

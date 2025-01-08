@@ -56,6 +56,7 @@ function ServiceItems() {
             onDelete={loadServiceItems}
             serviceItem={item}
             currentMotorcycleMilage={motorcycle.mileage}
+            motorcycleId={motorcycle.id}
           />
         </View>
       )}

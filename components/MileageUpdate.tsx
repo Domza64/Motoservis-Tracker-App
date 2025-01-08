@@ -32,7 +32,7 @@ export default function MileageUpdate({
       "UPDATE motorcycles SET mileage = ? WHERE id = ?"
     );
     const historyQuery = await db.prepareAsync(
-      "INSERT INTO mileage_history (motorcycle_id, mileage, recorded_date) VALUES ($motorcycleId, $mileage, $recorded_date)"
+      "INSERT INTO history (motorcycle_id, mileage, recorded_date, service_item_id) VALUES ($motorcycleId, $mileage, $recorded_date, NULL)"
     );
 
     try {

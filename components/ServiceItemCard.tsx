@@ -1,26 +1,23 @@
 import { View, Text, TouchableOpacity, Alert } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useSQLiteContext } from "expo-sqlite";
-import {
-  DataIcon,
-  DeleteIcon,
-  ServicedIcon,
-  SettingsIcon,
-  TireRepairIcon,
-} from "./Icons"; // Temporary icon component
+import { DataIcon, DeleteIcon, ServicedIcon, SettingsIcon } from "./Icons"; // Temporary icon component
 import ServiceItem from "@/lib/ServiceItem";
 import ServiceItemHistory from "@/lib/ServiceItemHistory";
+import { router } from "expo-router";
 
 interface Props {
   serviceItem: ServiceItem;
   currentMotorcycleMilage: number;
   onDelete?: () => void;
+  motorcycleId: number;
 }
 
 const ServiceItemCard = ({
   serviceItem,
   currentMotorcycleMilage,
   onDelete,
+  motorcycleId,
 }: Props) => {
   const db = useSQLiteContext();
   const { id, name, description, frequency_days, frequency_miles } =
@@ -115,6 +112,26 @@ const ServiceItemCard = ({
     );
   };
 
+  const serviced = async () => {
+    const qurey = await db.prepareAsync(
+      "INSERT INTO history (motorcycle_id, mileage, recorded_date, service_item_id) VALUES ($motorcycleId, $mileage, $recorded_date, $service_item_id)"
+    );
+    const dateNow = new Date().toISOString();
+
+    try {
+      await qurey.executeAsync({
+        $motorcycleId: motorcycleId,
+        $mileage: currentMotorcycleMilage,
+        $recorded_date: dateNow,
+        $service_item_id: id,
+      });
+    } catch (error: any) {
+      Alert.alert("Error", error.message);
+    } finally {
+      await qurey.finalizeAsync();
+    }
+  };
+
   return (
     <View
       className={`bg-white p-4 rounded-md shadow-md ${
@@ -156,8 +173,20 @@ const ServiceItemCard = ({
         </View>
 
         <View className="flex-col items-end justify-between">
-          <View className="flex-row gap-2">
-            <TouchableOpacity className="p-2">
+          <View className="flex-row">
+            <TouchableOpacity onPress={serviced} className="p-2">
+              <Text className="font-semibold bg-secondary rounded text-white py-1 px-2">
+                Serviced
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() =>
+                router.replace(
+                  `/motorcycle/${motorcycleId}/data?show=${serviceItem.id}`
+                )
+              }
+              className="p-2"
+            >
               <DataIcon />
             </TouchableOpacity>
             <TouchableOpacity className="p-2">

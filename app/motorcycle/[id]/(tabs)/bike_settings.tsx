@@ -79,8 +79,7 @@ export default function MotorcycleSettings() {
 
             try {
               await statement.executeAsync({ $id: parseInt(id.toString()) });
-              Alert.alert("Deleted", "Motorcycle deleted successfully.");
-              router.replace("/");
+              router.dismissAll();
             } catch (error: any) {
               Alert.alert("Error", error.message);
             } finally {

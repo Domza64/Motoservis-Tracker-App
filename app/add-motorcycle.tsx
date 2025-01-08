@@ -37,7 +37,7 @@ export default function AddMotorcycle() {
         INSERT INTO motorcycles (model, mileage) 
         VALUES ('${motorcycleData.model}', '${motorcycleData.mileage}');`);
 
-      router.replace("/");
+      router.back();
     } catch (error: any) {
       Alert.alert("Error", error.message);
     }
