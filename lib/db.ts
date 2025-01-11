@@ -27,7 +27,7 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
           mileage INTEGER NOT NULL
           );`);
 
-  // Create mileage_history table
+  // Create history table
   await db.execAsync(`
           CREATE TABLE IF NOT EXISTS history (
           id INTEGER PRIMARY KEY NOT NULL,
@@ -49,18 +49,6 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
           frequency_days INTEGER,
           frequency_miles INTEGER,
           FOREIGN KEY (motorcycle_id) REFERENCES motorcycles (id) ON DELETE CASCADE
-          );`);
-
-  // Create service_history table
-  await db.execAsync(`
-          CREATE TABLE IF NOT EXISTS service_history (
-          id INTEGER PRIMARY KEY NOT NULL,
-          motorcycle_id INTEGER NOT NULL,
-          service_item_id INTEGER NOT NULL,
-          mileage INTEGER NOT NULL,
-          service_date TEXT NOT NULL,
-          FOREIGN KEY (motorcycle_id) REFERENCES motorcycles (id) ON DELETE CASCADE,
-          FOREIGN KEY (service_item_id) REFERENCES service_items (id) ON DELETE CASCADE
           );`);
 
   // @ts-ignore

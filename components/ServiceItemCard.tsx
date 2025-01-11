@@ -32,7 +32,7 @@ const ServiceItemCard = ({
   useEffect(() => {
     const fetchServiceHistory = async () => {
       const statement = await db.prepareAsync(
-        "SELECT * FROM service_history WHERE service_item_id = $id ORDER BY service_date DESC"
+        "SELECT * FROM history WHERE service_item_id = $id ORDER BY service_date DESC"
       );
       try {
         const result = await statement.executeAsync<ServiceItemHistory>({
