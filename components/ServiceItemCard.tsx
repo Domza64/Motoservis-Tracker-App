@@ -134,7 +134,7 @@ const ServiceItemCard = ({
 
   return (
     <View
-      className={`bg-white p-4 rounded-md shadow-md ${
+      className={`bg-white border border-gray-200 p-4 rounded-md shadow-black shadow-md ${
         isServiceDue ? "border-2 border-red-500" : ""
       }`}
     >

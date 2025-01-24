@@ -48,7 +48,7 @@ function ServiceItems() {
   return (
     <FlatList
       data={services}
-      className="bg-white"
+      className="bg-background"
       keyExtractor={(item) => item.id.toString()}
       renderItem={({ item }) => (
         <View className="m-2">
